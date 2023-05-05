@@ -17,7 +17,7 @@
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
@@ -35,4 +35,59 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.rectangle {
+  height: 420px;
+  width: 300px;
+  margin-right: 25px;
+  margin-left: 25px;
+  position: relative;
+  border: 5px solid #555;
+}
+
+
+.divindiv{
+  text-align:justify;
+  padding: 10px;
+}
+.form {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 6px;
+  box-sizing: border-box;
+}
+.h1{
+  font-size: calc(20px + 2vmin);
+  font-weight: bold;  
+  font-family: "Lucida Console", "Courier New", monospace;
+  color: #282c34;
+}
+.h3{
+  font-size: calc(10px + 2vmin);
+  font-weight: bold;  
+  font-family: "Lucida Console", "Courier New", monospace;
+  color: #282c34;
+}
+
+.h31{
+  font-size: calc(10px + 2vmin);
+  font-weight: bold;  
+  font-family: "Lucida Console", "Courier New", monospace;
+  color: white;
+}
+
+.a{
+  font-size: calc(1px + 2vmin);
+}
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #555;
+  font-size: calc(10px + 2vmin);
+  font-weight: bold;  
+  font-family: "Lucida Console", "Courier New", monospace;
+  color:white;
 }
