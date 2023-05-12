@@ -9,21 +9,22 @@ const JavaPage = () =>{
 
   const handleGenerateText = async (event)=>{
     event.preventDefault()
-    const generateText = await generateText(prompt)
-    setResponse(generateText);
+    const generatedText = await generateText(prompt)
+    setResponse(generatedText);
   }
 
   async function generateText(prompt){
-    const response = await fetch ("/chestergpt",{
+    const response = await fetch("/chestergpt", {
       method: "POST",
-      headers:{
-        "Content-type" :"aplication/json"
+      headers: {
+        "Content-type": "application/json"
       },
-      body: JSON.stringify({promp:prompt})
-    })
-    const data= await response.text()
-    return data
+      body: JSON.stringify({ prompt: prompt })
+    });
+    const data = await response.text();
+    return data;
   }
+  
 
  
 

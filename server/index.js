@@ -1,9 +1,12 @@
 const express = require("express");
 const path = require('path');
+const { Configuration, OpenAIApi } = require("openai");
+
+
 const PORT = process.env.PORT || 3001
 
 const app = express()
-
+app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../chester/build')));
 
 app.get("/api", (req,res)=>{
@@ -18,10 +21,10 @@ app.get('/java', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
 });
 app.get('/python', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../chester/build', 'python.html'));
+    res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
 });
 app.get('/js', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../chester/build', 'js.html'));
+    res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
 });
 
 app.post('/chestergpt', async (req, res) =>{
@@ -31,23 +34,24 @@ app.post('/chestergpt', async (req, res) =>{
 })
 
 async function getResponseFromChatGPT(prompt) {
-    const response = await fetch("https://api.openai.com/v1/engines/davinci-codex/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer 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`
-      },
-      body: JSON.stringify({
-        prompt: prompt,
-        max_tokens: 60,
-        n: 1,
-        stop: "\n"
-      })
-    });
-    const data = await response.json();
-    return data.choices[0].text.trim();
-  }
+  const configuration = new Configuration({
+    apiKey: "//TODO Aqui hay que añadir la clave de la API de chatGPT",
+  });
+  const openai = new OpenAIApi(configuration);
+  const completion = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: [{role: "user", content: "Hola chatty"}],
+  });
+  return completion.data.choices[0].message
+}
 
 app.listen(PORT,()=>{
     console.log(`Server listening on ${PORT}`)
 })
+
+
+
+
+
+
+
