@@ -1,7 +1,8 @@
 const express = require("express");
 const path = require('path');
 const { Configuration, OpenAIApi } = require("openai");
-const { Octokit } = require("@octokit/rest");
+const fs = require('fs');
+//const { Octokit } = require("@octokit/rest");
 
 
 const PORT = process.env.PORT || 3001
@@ -11,17 +12,18 @@ app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../chester/build')));
 
 //Constante donde estara la ruta a la carpeta con los test generados por chatgpt
-const folderPath = 'ruta/a/la/carpeta'
+const folderPath = './tests'
 
 //Añadir las preguntas a realizar para generar test con chatgpt
 const JTestQuestion = 'INSERTAR PREGUNTA'
 
 
 // Configura la autenticación de GitHub
+/*
 const octokit = new Octokit({
   auth: 'YOUR_GITHUB_ACCESS_TOKEN' // TO DO Reemplaza con tu token de acceso de GitHub
 })
-
+*/
 app.get("/api", (req,res)=>{
     res.json({message:"Hola desde el servidor!"})
 })
@@ -33,10 +35,10 @@ app.get('/', (req, res) => {
 //Al cargar la pagina se hace la comunicacion con chatgpt para generar sus test
 app.get('/java', async (req, res) => {
     try{
-      const javaTest = await generateTest(JTestQuestion)
+
+      /*
       console.log("Test generado correctamente")
-      CreateJavaFile(javaTest)
-      await uploadToGitHub()
+      await uploadToGitHub()*/
       res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
     } catch(error){
       console.error('Error:', error)
@@ -57,25 +59,30 @@ app.get('/js', (req, res) => {
 
 app.post('/chestergpt', async (req, res) =>{
     const prompt= req.body.promp
-    const response= await getResponseFromChatGPT(prompt)
-    res.send(response)
+    const javaTest = await generateTest(JTestQuestion)
+    CreateJavaFile(javaTest['content'])
+    res.send(javaTest['content'])
 })
+app.get('/download', async (req, res) =>{
+  res.download('./tests/example.java')
+})
+
 
 async function generateTest(PROMPT){
   const configuration = new Configuration({
-    apiKey: "//TODO Aqui hay que añadir la clave de la API de chatGPT",
+    apiKey: "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",
   });
   const openai = new OpenAIApi(configuration);
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
-    messages: [{role: "user", content: "Hola chatty"}],
+    messages: [{role: "user", content: "Actua como si fueras un ingeniero en calidad de Software. Prepara los tests JUnit 5 y mockito que consideres necesarios (los métodos deben estar cubierto al 100%) de la clase BLFacadeImplementation.java de este proyecto en github: https://github.com/Mikeloon/BetsProject-JSFandHibernate/tree/master/src/main/java/businessLogic. Al emepezar a escribir el código de los tests, escribe //%START_TEST% y al acabar, escribe //$END_TEST% y el paquete donde estará almacenado temdra como nombre tests"}],
   });
   return completion.data.choices[0].message
 }
 
 //funcion para guardar el test de chatgpt en archivo java
 function CreateJavaFile(content) {
-  const filePath = `${folderPath}/AÑADIR NOMBRES ARCHIVO.java`;
+  const filePath = `${folderPath}/example.java`;
   fs.writeFileSync(filePath, content);
   console.log(`Archivo Java guardado en: ${filePath}`);
 }

@@ -37,7 +37,10 @@ const JavaPage = () =>{
         <form onSubmit={handleGenerateText}>
           <input type="text" value={prompt} onChange={handleInputChange}/>
           <button type="submit">Submit</button>
-        </form>∫
+        </form>
+        <form method="GET" action="/download">
+          <button type="submit">Download generated file</button>
+        </form>
         <p>{response}</p>
       </div>
     )
