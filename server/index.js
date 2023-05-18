@@ -1,9 +1,7 @@
 const express = require("express");
 const path = require('path');
-const { Configuration, OpenAIApi } = require("openai");
-const fs = require('fs');
-//const { Octokit } = require("@octokit/rest");
-
+const { Octokit } = require("@octokit/rest");
+const {generateTestMethod, generateTestClass, generateTestClassWeb,compareTests, CreateFile} =require('./scripts.js')
 
 const PORT = process.env.PORT || 3001
 
@@ -19,11 +17,11 @@ const JTestQuestion = 'INSERTAR PREGUNTA'
 
 
 // Configura la autenticación de GitHub
-/*
+
 const octokit = new Octokit({
-  auth: 'YOUR_GITHUB_ACCESS_TOKEN' // TO DO Reemplaza con tu token de acceso de GitHub
+  auth: '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' // TO DO Reemplaza con tu token de acceso de GitHub
 })
-*/
+
 app.get("/api", (req,res)=>{
     res.json({message:"Hola desde el servidor!"})
 })
@@ -57,51 +55,86 @@ app.get('/js', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
 });
 
-app.post('/chestergpt', async (req, res) =>{
-    const prompt= req.body.promp
-    const javaTest = await generateTest(JTestQuestion)
-    CreateJavaFile(javaTest['content'])
-    res.send(javaTest['content'])
+app.post('/chestergptjava', async (req, res) =>{
+    const link= req.body.prompt
+    const nombreMetodo= req.body.prompt2
+    const linkTest= req.body.prompt3
+    comprobacion= link.split(".")
+    if(comprobacion[comprobacion.length-1]=="java"){
+    javaTest="hola"
+    if(nombreMetodo!=null){
+      javaTest = await generateTestMethod(link, nombreMetodo, "java")
+      CreateFile(javaTest['content'],".java")
+    }
+    else{
+      javaTest = await generateTestClass(link, "java")
+      CreateFile(javaTest['content'],".java")
+    }
+    const comparation= await compareTests(javaTest['content'], linkTest)
+    res.send(comparation['content'])}
+    else{
+      
+      res.send("Por favor, inserte una clase java.")
+    }
 })
+
+app.post('/chestergptpython', async (req, res) =>{
+  const link= req.body.prompt
+  const nombreMetodo= req.body.prompt2
+  const linkTest= req.body.prompt4
+
+  javaTest="hola"
+  if(nombreMetodo!=null){
+    javaTest = await generateTestMethod(link, nombreMetodo, idioma)
+  }
+  else{
+    javaTest = await generateTestClass(link, idioma)
+  }
+  if(idioma=="python" || idioma =="python"){
+    CreateFile(javaTest['content'],".py")
+  }
+  else if (idioma=="java" || idioma=="java"){
+    CreateFile(javaTest['content'],".java")
+
+  }
+  else if (idioma=="JavaScript" || idoma=="js" || idioma=="javascript"){
+    CreateFile(javaTest['content'], ".js")
+  }
+  const comparation= await compareTests(javaTest['content'], link, linkTest)
+  res.send(comparation['content'])
+})
+
+app.post('/chestergptweb', async (req, res) =>{
+  const link= req.body.prompt
+  const nombreMetodo= req.body.prompt2
+  const idioma= req.body.prompt3
+  const linkTest= req.body.prompt4
+
+  javaTest="hola"
+  if(nombreMetodo!=null){
+    javaTest = await generateTestMethod(link, nombreMetodo, idioma)
+  }
+  else{
+    javaTest = await generateTestClass(link, idioma)
+  }
+  if(idioma=="python" || idioma =="python"){
+    CreateFile(javaTest['content'],".py")
+  }
+  else if (idioma=="java" || idioma=="java"){
+    CreateFile(javaTest['content'],".java")
+
+  }
+  else if (idioma=="JavaScript" || idoma=="js" || idioma=="javascript"){
+    CreateFile(javaTest['content'], ".js")
+  }
+  const comparation= await compareTests(javaTest['content'], link, linkTest)
+  res.send(comparation['content'])
+})
+
+
 app.get('/download', async (req, res) =>{
   res.download('./tests/example.java')
 })
-
-
-async function generateTest(PROMPT){
-  const configuration = new Configuration({
-    apiKey: "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",
-  });
-  const openai = new OpenAIApi(configuration);
-  const completion = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages: [{role: "user", content: "Actua como si fueras un ingeniero en calidad de Software. Prepara los tests JUnit 5 y mockito que consideres necesarios (los métodos deben estar cubierto al 100%) de la clase BLFacadeImplementation.java de este proyecto en github: https://github.com/Mikeloon/BetsProject-JSFandHibernate/tree/master/src/main/java/businessLogic. Al emepezar a escribir el código de los tests, escribe //%START_TEST% y al acabar, escribe //$END_TEST% y el paquete donde estará almacenado temdra como nombre tests"}],
-  });
-  return completion.data.choices[0].message
-}
-
-//funcion para guardar el test de chatgpt en archivo java
-function CreateJavaFile(content) {
-  const filePath = `${folderPath}/example.java`;
-  fs.writeFileSync(filePath, content);
-  console.log(`Archivo Java guardado en: ${filePath}`);
-}
-
-//Función para subir el archivo a un repositorio de GitHub, se le puede meter algun parametro como la ruta del archivo
-async function uploadToGitHub() {
-  const filePath = `${folderPath}/Example.java`
-  const content = fs.readFileSync(filePath, 'utf8')
-
-  const response = await octokit.repos.createOrUpdateFileContents({
-    owner: 'TU_USUARIO',  //Añadir datos que faltan
-    repo: 'TU_REPOSITORIO', //TO DO
-    path: 'ruta/al/archivo/Example.java', //TO DO
-    message: 'Agregar archivo Example.java',
-    content: Buffer.from(content).toString('base64')
-  })
-
-  console.log(`Archivo subido a GitHub: ${response.data.html_url}`)
-}
 
 app.listen(PORT,()=>{
     console.log(`Server listening on ${PORT}`)
