@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require('path');
 const { Octokit } = require("@octokit/rest");
-const {generateTestMethod, generateTestClass, generateTestClassWeb,compareTests, CreateFile} =require('./scripts.js')
+const {generateTestMethod, generateTestClass, generateTestClassWeb,compareTests, CreateFile} =require('./scriptsJavaPython.js')
 
 const PORT = process.env.PORT || 3001
 
@@ -62,6 +62,7 @@ app.post('/chestergptjava', async (req, res) =>{
     comprobacion= link.split(".")
     if(comprobacion[comprobacion.length-1]=="java"){
     javaTest="hola"
+    comparation="hola"
     if(nombreMetodo!=null){
       javaTest = await generateTestMethod(link, nombreMetodo, "java")
       CreateFile(javaTest['content'],".java")
@@ -72,10 +73,13 @@ app.post('/chestergptjava', async (req, res) =>{
     }
 
     if(linkTest.toLowerCase().includes("test")|linkTest.toLowerCase().includes("prueba")){
-      comparation= await compareTests(javaTest['content'], linkTest)
+      comparation= await compareTests(javaTest['content'], linkTest, javaTest['content'])
+      juntos= [comparation['content'], javaTest['content']]
     }
-    else{comparation['content']="Proporcione un test válido"}
-    const juntos= [comparation['content'], javaTest['content']]
+    else{
+      juntos= ["Proporcione un test válido", javaTest['content']]
+    }
+    
     console.log(juntos)
     res.send(juntos)}
     else{
@@ -87,27 +91,34 @@ app.post('/chestergptjava', async (req, res) =>{
 app.post('/chestergptpython', async (req, res) =>{
   const link= req.body.prompt
   const nombreMetodo= req.body.prompt2
-  const linkTest= req.body.prompt4
-
+  const linkTest= req.body.prompt3
+  comprobacion= link.split(".")
+  if(comprobacion[comprobacion.length-1]=="py"){
   javaTest="hola"
+  comparation="hola"
   if(nombreMetodo!=null){
-    javaTest = await generateTestMethod(link, nombreMetodo, idioma)
-  }
-  else{
-    javaTest = await generateTestClass(link, idioma)
-  }
-  if(idioma=="python" || idioma =="python"){
+    javaTest = await generateTestMethod(link, nombreMetodo, "python")
     CreateFile(javaTest['content'],".py")
   }
-  else if (idioma=="java" || idioma=="java"){
-    CreateFile(javaTest['content'],".java")
+  else{
+    javaTest = await generateTestClass(link, "python")
+    CreateFile(javaTest['content'],".py")
+  }
 
+  if(linkTest.toLowerCase().includes("test")|linkTest.toLowerCase().includes("prueba")){
+    comparation= await compareTests(javaTest['content'], linkTest, javaTest['content'])
+    juntos= [comparation['content'], javaTest['content']]
   }
-  else if (idioma=="JavaScript" || idoma=="js" || idioma=="javascript"){
-    CreateFile(javaTest['content'], ".js")
+  else{
+    juntos= ["Proporcione un test válido", javaTest['content']]
   }
-  const comparation= await compareTests(javaTest['content'], link, linkTest)
-  res.send(comparation['content'])
+  
+  console.log(juntos)
+  res.send(juntos)}
+  else{
+    
+    res.send("Por favor, inserte una clase java.")
+  }
 })
 
 app.post('/chestergptweb', async (req, res) =>{
@@ -138,8 +149,12 @@ app.post('/chestergptweb', async (req, res) =>{
 })
 
 
-app.get('/download', async (req, res) =>{
+app.get('/downloadjava', async (req, res) =>{
   res.download('./tests/example.java')
+})
+
+app.get('/downloadpython', async (req, res) =>{
+  res.download('./tests/example.py')
 })
 
 app.listen(PORT,()=>{

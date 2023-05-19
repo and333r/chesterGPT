@@ -1,116 +1,83 @@
-Aquí está el código con los tests necesarios:
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-```java
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class BLFacadeImplementationTest {
+public class TestCreateQuestion {
 
     private BLFacadeImplementation facade;
 
     @Before
     public void setUp() {
+        // Initialize BLFacadeImplementation
         facade = new BLFacadeImplementation();
     }
 
     @Test
-    public void testCreateQuestion() {
-        String question = "What is the capital of Spain?";
-        String option1 = "Madrid";
-        String option2 = "Paris";
-        String option3 = "Berlin";
-        float betMinimum = 1.0f;
-        float betMaximum = 10.0f;
-        int result = facade.createQuestion(question, option1, option2, option3, betMinimum, betMaximum);
-        assertEquals("Question not created correctly", 0, result);
+    public void testCreateQuestionValid() {
+        // Test valid question creation
+        String statement = "What fruit is red?";
+        List<String> options = new ArrayList<String>();
+        options.add("Apple");
+        options.add("Banana");
+        options.add("Orange");
+        boolean multiple = false;
+
+        Question question = facade.createQuestion(statement, options, multiple);
+        assertNotNull(question);
+        assertEquals(statement, question.getStatement());
+        assertEquals(options, question.getOptions());
+        assertEquals(multiple, question.isMultiple());
     }
 
-    @Test
-    public void testCreateQuestionNullQuestion() {
-        String question = null;
-        String option1 = "Madrid";
-        String option2 = "Paris";
-        String option3 = "Berlin";
-        float betMinimum = 1.0f;
-        float betMaximum = 10.0f;
-        int result = facade.createQuestion(question, option1, option2, option3, betMinimum, betMaximum);
-        assertEquals("Question created with null question", -1, result);
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateQuestionInvalidStatement() {
+        // Test invalid question creation with null statement
+        String statement = null;
+        List<String> options = new ArrayList<String>();
+        options.add("Apple");
+        options.add("Banana");
+        options.add("Orange");
+        boolean multiple = false;
+
+        facade.createQuestion(statement, options, multiple);
     }
 
-    @Test
-    public void testCreateQuestionNullOptions() {
-        String question = "What is the capital of Spain?";
-        String option1 = null;
-        String option2 = null;
-        String option3 = null;
-        float betMinimum = 1.0f;
-        float betMaximum = 10.0f;
-        int result = facade.createQuestion(question, option1, option2, option3, betMinimum, betMaximum);
-        assertEquals("Question created with null options", -1, result);
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateQuestionInvalidOptions() {
+        // Test invalid question creation with empty options list
+        String statement = "What fruit is red?";
+        List<String> options = new ArrayList<String>();
+        boolean multiple = false;
+
+        facade.createQuestion(statement, options, multiple);
     }
 
-    @Test
-    public void testCreateQuestionEmptyQuestion() {
-        String question = "";
-        String option1 = "Madrid";
-        String option2 = "Paris";
-        String option3 = "Berlin";
-        float betMinimum = 1.0f;
-        float betMaximum = 10.0f;
-        int result = facade.createQuestion(question, option1, option2, option3, betMinimum, betMaximum);
-        assertEquals("Question created with empty question", -1, result);
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateQuestionInvalidOption() {
+        // Test invalid question creation with null option
+        String statement = "What fruit is red?";
+        List<String> options = new ArrayList<String>();
+        options.add("Apple");
+        options.add(null);
+        options.add("Orange");
+        boolean multiple = false;
+
+        facade.createQuestion(statement, options, multiple);
     }
 
-    @Test
-    public void testCreateQuestionEmptyOptions() {
-        String question = "What is the capital of Spain?";
-        String option1 = "";
-        String option2 = "";
-        String option3 = "";
-        float betMinimum = 1.0f;
-        float betMaximum = 10.0f;
-        int result = facade.createQuestion(question, option1, option2, option3, betMinimum, betMaximum);
-        assertEquals("Question created with empty options", -1, result);
-    }
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateQuestionInvalidMultiple() {
+        // Test invalid question creation with multiple set to true but less than 2 options
+        String statement = "What fruit is red?";
+        List<String> options = new ArrayList<String>();
+        options.add("Apple");
+        boolean multiple = true;
 
-    @Test
-    public void testCreateQuestionInvalidBetMinimum() {
-        String question = "What is the capital of Spain?";
-        String option1 = "Madrid";
-        String option2 = "Paris";
-        String option3 = "Berlin";
-        float betMinimum = -1.0f;
-        float betMaximum = 10.0f;
-        int result = facade.createQuestion(question, option1, option2, option3, betMinimum, betMaximum);
-        assertEquals("Question created with invalid bet minimum", -1, result);
+        facade.createQuestion(statement, options, multiple);
     }
-
-    @Test
-    public void testCreateQuestionInvalidBetMaximum() {
-        String question = "What is the capital of Spain?";
-        String option1 = "Madrid";
-        String option2 = "Paris";
-        String option3 = "Berlin";
-        float betMinimum = 1.0f;
-        float betMaximum = -10.0f;
-        int result = facade.createQuestion(question, option1, option2, option3, betMinimum, betMaximum);
-        assertEquals("Question created with invalid bet maximum", -1, result);
-    }
-
-    @Test
-    public void testCreateQuestionInvalidBetMinimumAndMaximum() {
-        String question = "What is the capital of Spain?";
-        String option1 = "Madrid";
-        String option2 = "Paris";
-        String option3 = "Berlin";
-        float betMinimum = 10.0f;
-        float betMaximum = 1.0f;
-        int result = facade.createQuestion(question, option1, option2, option3, betMinimum, betMaximum);
-        assertEquals("Question created with invalid bet minimum and maximum", -1, result);
-    }
-
 }
-
-```

@@ -3,7 +3,7 @@ import {Link, generatePath} from "react-router-dom"
 import logo from "./logo.svg";
 import "./App.css";
 
-const JavaPage = () =>{
+const PythonPage = () =>{
   const [prompt, setPrompt] = useState("")
   const [prompt2, setPrompt2] = useState("")
   const [prompt3, setPrompt3] = useState("")
@@ -26,7 +26,7 @@ const JavaPage = () =>{
 
 
   async function generateText(prompt, prompt2, prompt3){
-    const response = await fetch("/chestergptjava", {
+    const response = await fetch("/chestergptpython", {
       method: "POST",
       headers: {
         "Content-type": "application/json"
@@ -51,7 +51,7 @@ const JavaPage = () =>{
     return (
       <div className="Appp">
       <form onSubmit={handleGenerateText}>
-        <h1>Java test generator</h1>
+        <h1>Python test generator</h1>
         <p>Rellene los siguientes campos (En caso de que el nombre del método quede vacío, se crearán tests para toda la clase): </p>
         <div className="form-group">
           <label htmlFor="linkRepo">Link del repositorio de la clase que desea probar: </label>
@@ -70,7 +70,7 @@ const JavaPage = () =>{
       {!isButtonDisabled && <p>Análisis comparativo de chesterGPT entre el código generado por el y el proporcionado por ti: </p>}
       {isActive && <div className="loader"></div>}
       {!isButtonDisabled && <div dangerouslySetInnerHTML={{ __html: response }}></div>}
-      <form method="GET" action="/downloadjava">
+      <form method="GET" action="/downloadpython">
         {!isButtonDisabled && <button id="button" type="submit" className="btn btn-secondary">Descargar archivo generado</button>}
       </form>
       <p>Nota: Si se quiere probar con una clase con muchos métodos, es probable que no se genere correctamente.</p>
@@ -81,4 +81,4 @@ const JavaPage = () =>{
 
 
 
-export default JavaPage
+export default PythonPage

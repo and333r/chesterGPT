@@ -2,6 +2,7 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import HomePage from "./HomePage";
+import PythonPage  from "./PythonTests";
 import JavaPage  from "./JavaTests";
 
 
@@ -21,6 +22,7 @@ function App() {
       <Routes>
         <Route path ="/" element={<HomePage />}></Route>
         <Route path ="/java" element={<JavaPage />}></Route>
+        <Route path ="/python" element={<PythonPage />}></Route>
       </Routes>
     </Router>
   );
