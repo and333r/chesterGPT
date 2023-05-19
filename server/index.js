@@ -70,8 +70,14 @@ app.post('/chestergptjava', async (req, res) =>{
       javaTest = await generateTestClass(link, "java")
       CreateFile(javaTest['content'],".java")
     }
-    const comparation= await compareTests(javaTest['content'], linkTest)
-    res.send(comparation['content'])}
+
+    if(linkTest.toLowerCase().includes("test")|linkTest.toLowerCase().includes("prueba")){
+      comparation= await compareTests(javaTest['content'], linkTest)
+    }
+    else{comparation['content']="Proporcione un test válido"}
+    const juntos= [comparation['content'], javaTest['content']]
+    console.log(juntos)
+    res.send(juntos)}
     else{
       
       res.send("Por favor, inserte una clase java.")

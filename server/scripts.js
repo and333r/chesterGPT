@@ -11,7 +11,12 @@ async function generateTestMethod(link, method, idioma){
     const openai = new OpenAIApi(configuration);
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: [{role: "user", content: `Actua como si fueras un ingeniero en calidad de Software. Prepara los tests que consideres necesarios (los métodos deben estar cubierto al 100%) del método ${method} que está en la clase: ${link}. El proyecto está escrito en ${idioma}, haz los tests en ese lenguaje. Al emepezar a escribir el código de los tests añade un comentario con START al incio y otro comentario con FINAl al final. Como respuesta dame unicmanete le codigo.`}],
+      messages: [{role: "user", content: `Actua como si fueras un ingeniero en calidad de Software. 
+                                          Prepara los tests que consideres necesarios (los métodos deben 
+                                          estar cubierto al 100%) para probar el método ${method} que está 
+                                          en la clase: ${link}. El proyecto está escrito en ${idioma}, como 
+                                          respuesta dame unicmanete el codigo, y formatea el código para que 
+                                          se vea correcto en html Acuerdate de añadir también los imports necesarios.`}],
     });
     return completion.data.choices[0].message
   }
@@ -22,7 +27,14 @@ async function generateTestClass(link, idioma){
     const openai = new OpenAIApi(configuration);
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: [{role: "user", content: `Actua como si fueras un ingeniero en calidad de Software. Prepara los tests que consideres necesarios (los métodos deben estar cubierto al 100%) de la clase: ${link}. El proyecto está escrito en ${idioma}, haz los tests en ese lenguaje. Al emepezar a escribir el código de los tests añade un comentario con START al incio y otro comentario con FINAl al final, y el paquete donde estará almacenado temdra como nombre tests`}],
+      messages: [{role: "user", content: `Actua como si fueras un ingeniero en calidad de Software. 
+                                          Prepara los tests que consideres necesarios (los métodos 
+                                          deben estar cubierto al 100%) de la clase: ${link}. El 
+                                          proyecto está escrito en ${idioma}, haz los tests en ese 
+                                          lenguaje. Al emepezar a escribir el código de los tests 
+                                          añade un comentario con START al incio y otro comentario 
+                                          con FINAl al final, y el paquete donde estará almacenado 
+                                          temdra como nombre tests`}],
     });
     return completion.data.choices[0].message
   }
@@ -33,7 +45,14 @@ async function generateTestClassWeb(link, idioma){
     const openai = new OpenAIApi(configuration);
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: [{role: "user", content: `Actua como si fueras un ingeniero en calidad de Software. Prepara los tests que consideres necesarios (los métodos deben estar cubierto al 100%) de la clase: ${link}. El proyecto está escrito en ${idioma}, haz los tests en ese lenguaje. Al emepezar a escribir el código de los tests añade un comentario con START al incio y otro comentario con FINAl al final, y el paquete donde estará almacenado temdra como nombre tests. Haz los tests con puppeteer.`}],
+      messages: [{role: "user", content: `Actua como si fueras un ingeniero en calidad de Software. 
+                                          Prepara los tests que consideres necesarios (los métodos 
+                                          deben estar cubierto al 100%) de la clase: ${link}. El 
+                                          proyecto está escrito en ${idioma}, haz los tests en ese 
+                                          lenguaje. Al emepezar a escribir el código de los tests 
+                                          añade un comentario con START al incio y otro comentario 
+                                          con FINAl al final, y el paquete donde estará almacenado 
+                                          temdra como nombre tests. Haz los tests con puppeteer.`}],
     });
     return completion.data.choices[0].message
   }
@@ -45,7 +64,18 @@ async function compareTests(PROMPT, linkTest){
     const openai = new OpenAIApi(configuration);
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: [{role: "user", content: `Compara este test: ${linkTest} con el test que tu has generado ${PROMPT}. Realiza un analisis detallado de cual es mejor test en tu opinion.`}],
+      messages: [{role: "user", content: `Compara este test: ${linkTest} con el test que tu has 
+                                          generado ${PROMPT}. Realiza un analisis detallado de cual 
+                                          es mejor test en tu opinion. La comparación debe dar tu opinión
+                                          sobre: Claridad, covertura, eficiencia y mantenibilidad.
+                                          formatea la respuesta dentro de un <div> html, y cuando analices
+                                          los cuatro apartados anteriores, añadelos a una <ul>, con un
+                                          <li> por cada aspecto. Por cada elemento a analizar que
+                                          te hedicho anteriormente, analiza un mínimo de cinco puntos
+                                          por cada uno. También, en un parrafo aparte, quiero que
+                                          digas que cambiarias del primer test con el fin de mejorarlo, dando
+                                          ejemplos concretos. Cuando vayas a referirte al test generado, 
+                                          refierete a el como: el test generado por mi.`}],
     });
     return completion.data.choices[0].message
   }
