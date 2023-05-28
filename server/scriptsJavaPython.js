@@ -54,7 +54,7 @@ async function generateTestClassWeb(link, idioma){
                                           con FINAl al final, y el paquete donde estará almacenado 
                                           temdra como nombre tests. Haz los tests con puppeteer.`}],
     });
-    return completion.data.choices[0].message
+    return completion.data.choices[0].message 
   }
 
 async function compareTests(PROMPT, linkTest, code){
