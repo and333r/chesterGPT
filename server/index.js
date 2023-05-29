@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require('path');
 const { Octokit } = require("@octokit/rest");
-const {generateTestMethod, generateTestClass, generateTestClassWeb,compareTests, CreateFile} =require('./scriptsJavaPython.js')
+const {generateTestMethod, generateTestClass, generateTestClassWeb,compareTests, CreateFile, generateTestClassWebMethod} =require('./scriptsJavaPython.js')
 
 const PORT = process.env.PORT || 3001
 
@@ -51,8 +51,15 @@ app.post('/java', async(req,res) =>{
 app.get('/python', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
 });
-app.get('/js', (req, res) => {
+app.get('/javascript', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
+});
+
+app.get('/generador', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
+});
+app.get('/readme', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
 });
 
 app.post('/chestergptjava', async (req, res) =>{
@@ -124,30 +131,34 @@ app.post('/chestergptpython', async (req, res) =>{
 app.post('/chestergptweb', async (req, res) =>{
   const link= req.body.prompt
   const nombreMetodo= req.body.prompt2
-  const idioma= req.body.prompt3
-  const linkTest= req.body.prompt4
-
+  const linkTest= req.body.prompt3
+  comprobacion= link.split(".")
+  if(comprobacion[comprobacion.length-1]=="js"){
   javaTest="hola"
+  comparation="hola"
   if(nombreMetodo!=null){
-    javaTest = await generateTestMethod(link, nombreMetodo, idioma)
+    javaTest = await generateTestClassWebMethod(link, nombreMetodo, "js")
+    CreateFile(javaTest['content'],".js")
   }
   else{
-    javaTest = await generateTestClass(link, idioma)
+    javaTest = await generateTestClassWeb(link, "js")
+    CreateFile(javaTest['content'],".js")
   }
-  if(idioma=="python" || idioma =="python"){
-    CreateFile(javaTest['content'],".py")
+  if(linkTest.toLowerCase().includes("test")|linkTest.toLowerCase().includes("prueba")){
+    comparation= await compareTests(javaTest['content'], linkTest, javaTest['content'])
+    juntos= [comparation['content'], javaTest['content']]
   }
-  else if (idioma=="java" || idioma=="java"){
-    CreateFile(javaTest['content'],".java")
-
+  else{
+    juntos= ["Proporcione un test válido", javaTest['content']]
   }
-  else if (idioma=="JavaScript" || idoma=="js" || idioma=="javascript"){
-    CreateFile(javaTest['content'], ".js")
+  
+  console.log(juntos)
+  res.send(juntos)}
+  else{
+    
+    res.send(["Por favor, inserte una clase java.", ""])
   }
-  const comparation= await compareTests(javaTest['content'], link, linkTest)
-  res.send(comparation['content'])
 })
-
 
 app.get('/downloadjava', async (req, res) =>{
   res.download('./tests/example.java')
