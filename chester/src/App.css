@@ -315,3 +315,52 @@ pre[class*=language-] {
 .token.entity {
   cursor: help
 }
+
+/*Readme*/
+
+.bodyReadme {
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7;
+  color: #333;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+.h1Readme , .h2Readme , .h3Readme  {
+  color: #333;
+}
+
+.h1Readme  {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.h2Readme  {
+  font-size: 28px;
+  margin-bottom: 15px;
+}
+
+.h3Readme  {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.pReadme  {
+  margin-bottom: 10px;
+}
+
+.codeReadme  {
+  font-family: Consolas, monospace;
+  background-color: #f1f1f1;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.aReadme  {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.aReadme:hover {
+  text-decoration: underline;
+}
