@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3001
 
 const app = express()
 app.use(express.json());
-app.use(express.static(path.resolve(__dirname, '../chester/build')));
+app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 
 //Constante donde estara la ruta a la carpeta con los test generados por chatgpt
 const folderPath = './tests'
@@ -27,7 +27,7 @@ app.get("/api", (req,res)=>{
 })
 
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
   });
 
 //Al cargar la pagina se hace la comunicacion con chatgpt para generar sus test
@@ -37,7 +37,7 @@ app.get('/java', async (req, res) => {
       /*
       console.log("Test generado correctamente")
       await uploadToGitHub()*/
-      res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
+      res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
     } catch(error){
       console.error('Error:', error)
     }
@@ -49,17 +49,17 @@ app.post('/java', async(req,res) =>{
 })
 
 app.get('/python', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
 });
 app.get('/javascript', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
 });
 
 app.get('/generador', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
 });
 app.get('/readme', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../chester/build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
 });
 
 app.post('/chestergptjava', async (req, res) =>{
