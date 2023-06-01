@@ -6,7 +6,7 @@ const folderPath = './tests'
 
 async function generateTestMethod(link, method, idioma){
     const configuration = new Configuration({
-      apiKey: "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",
+      apiKey: "YOUR_API_KEY",
     });
     const openai = new OpenAIApi(configuration);
     const completion = await openai.createChatCompletion({
