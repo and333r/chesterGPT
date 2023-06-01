@@ -74,7 +74,8 @@ const JavaScriptPage = () =>{
       <form method="GET" action="/downloadjava">
         {!isButtonDisabled && <button id="button" type="submit" className="btn btn-secondary">Descargar archivo generado</button>}
       </form>
-      <p>Nota: Si se quiere probar con una clase con muchos métodos, es probable que no se genere correctamente.</p>
+      <p>Notas: Si se quiere probar con una clase con muchos métodos, es probable que no se genere correctamente. Cabe la posibilidad que la respuesta no salga en el formato adecuado, en esos casos, vuelva a generar el test.</p>
+      <p>El test que se genera es más orientativo que resolutivo, debido a que ChesterGPT no entiende el código, ni lo que se está haciendo con el, y por tanto, es muy posible que haya incoherencias. Recomendamos generar varias veces los tests.</p>
     </div>
     )
 

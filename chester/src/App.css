@@ -286,6 +286,10 @@ pre[class*=language-] {
   background: hsla(0, 0%, 100%, .5)
 }
 
+.a{
+  color: white
+}
+
 .token.atrule,
 .token.attr-value,
 .token.keyword {

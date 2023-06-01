@@ -4,13 +4,14 @@ const fs = require('fs');
 const { Octokit } = require("@octokit/rest");
 const folderPath = './tests'
 
+const API_KEY= "YOUR_KEY"
 async function generateTestMethod(link, method, idioma){
     const configuration = new Configuration({
-      apiKey: "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",
+      apiKey: API_KEY,
     });
     const openai = new OpenAIApi(configuration);
     const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo-0301",
       messages: [{role: "user", content: `Actua como si fueras un ingeniero en calidad de Software. 
                                           Prepara los tests que consideres necesarios (los métodos deben 
                                           estar cubierto al 100%) para probar el método ${method} que está 
@@ -24,11 +25,11 @@ async function generateTestMethod(link, method, idioma){
   }
 async function generateTestClass(link, idioma){
     const configuration = new Configuration({
-      apiKey: "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",
+      apiKey: API_KEY,
     });
     const openai = new OpenAIApi(configuration);
     const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo-0301",
       messages: [{role: "user", content: `Actua como si fueras un ingeniero en calidad de Software. 
                                           Prepara los tests que consideres necesarios (los métodos 
                                           deben estar cubierto al 100%) de la clase: ${link}. El 
@@ -43,11 +44,11 @@ async function generateTestClass(link, idioma){
   }
 async function generateTestClassWeb(link, idioma){
     const configuration = new Configuration({
-      apiKey: "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",
+      apiKey: API_KEY,
     });
     const openai = new OpenAIApi(configuration);
     const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo-0301",
       messages: [{role: "user", content: ` Actua como si fueras un ingeniero en calidad de Software. 
                                           Identifica que es lo que hace cada función de la clase y en base a eso,
                                           prepara los tests que consideres necesarios (los métodos 
@@ -66,11 +67,11 @@ async function generateTestClassWeb(link, idioma){
   }
   async function generateTestClassWebMethod(link, idioma, metodo){
     const configuration = new Configuration({
-      apiKey: "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",
+      apiKey: API_KEY,
     });
     const openai = new OpenAIApi(configuration);
     const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo-0301",
       messages: [{role: "user", content: ` Actua como si fueras un ingeniero en calidad de Software. 
                                           Identifica que es lo que hace la función ${metodo} y en base a eso,
                                           prepara los tests que consideres necesarios (los métodos 
@@ -90,11 +91,11 @@ async function generateTestClassWeb(link, idioma){
 
 async function compareTests(PROMPT, linkTest, code){
     const configuration = new Configuration({
-      apiKey: "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",
+      apiKey: API_KEY,
     });
     const openai = new OpenAIApi(configuration);
     const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo-0301",
       messages: [{role: "user", content: `Compara este test: ${linkTest} con el test que tu has 
                                           generado ${PROMPT}. Realiza un analisis detallado de cual 
                                           es mejor test en tu opinion. La comparación debe dar tu opinión
@@ -108,11 +109,7 @@ async function compareTests(PROMPT, linkTest, code){
                                           ejemplos concretos. Cuando vayas a referirte al test generado, 
                                           refierete a el como: el test generado por mi.
                                           
-                                          También, al final de tu análisis, en un div aparte, añade siempre este código: ${code}. De tal manera
-                                          que se vea en html exactamente igual que en el lenguaje en el que esta
-                                          escrito, es decir, formatea el código para que no exista diferencia entre 
-                                          como se ve en un archivo fuente de ese lenguaje y html. Para ello,
-                                          utiliza este formato: 
+                                          Siempre, debajo del análisis y en un <div> aparte, añade esto:
                                           <div style="background-color: #efefef;"><pre><code>${code}</code></pre></div>`}],
     });
     return completion.data.choices[0].message
