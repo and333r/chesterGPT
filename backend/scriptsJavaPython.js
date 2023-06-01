@@ -4,7 +4,7 @@ const fs = require('fs');
 const { Octokit } = require("@octokit/rest");
 const folderPath = './tests'
 
-const API_KEY= "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"
+const API_KEY= "YOUR_KEY"
 async function generateTestMethod(link, method, idioma){
     const configuration = new Configuration({
       apiKey: API_KEY,

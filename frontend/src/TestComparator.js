@@ -13,7 +13,7 @@ const TestComparator = () =>{
       <div class="rectangle">
         <h3 class="h31">JAVA</h3>
         <div class="divindiv">
-        <a class="a">Para comparar los <a href="METER LINK ORIGINAL">tests originales</a> con los tests generados,
+        <a class="a">Para comparar los <a href="https://app.codecov.io/gh/and333r/BetsProject-JSFandHibernate">tests originales</a> con los tests generados,
         se ha utilizado la herramienta CodeCov, que mide el porcentaje de covertura de los tests. Haciendo click
         en el botón inferior, serás redirigido al análisis de CodeCov del proyecto con los tests generados por
         ChesterGPT. 
@@ -23,7 +23,7 @@ const TestComparator = () =>{
       <div class="rectangle">
         <h3 class="h31">PYTHON</h3>
         <div class="divindiv">
-        <a class="a">Para comparar los <a class=".a" href="METER LINK ORIGINAL">tests originales</a> con los tests generados,
+        <a class="a">Para comparar los <a class=".a" href="https://app.codecov.io/gh/and333r/PythonExampleProject">tests originales</a> con los tests generados,
         se ha utilizado la herramienta CodeCov, que mide el porcentaje de covertura de los tests. Haciendo click
         en el botón inferior, serás redirigido al análisis de CodeCov del proyecto con los tests generados por
         ChesterGPT. 
@@ -33,7 +33,7 @@ const TestComparator = () =>{
       <div class="rectangle">
         <h3 class="h31">JAVASCRIPT</h3>
         <div class="divindiv">
-        <a class="a">Para comparar los <a class=".a" href="METER LINK ORIGINAL">tests originales</a> con los tests generados,
+        <a class="a">Para comparar los <a class=".a" href="https://app.codecov.io/gh/and333r/Very-Basic-Node-JS-Project-With-Unit-Tests">tests originales</a> con los tests generados,
         se ha utilizado la herramienta CodeCov, que mide el porcentaje de covertura de los tests. Haciendo click
         en el botón inferior, serás redirigido al análisis de CodeCov del proyecto con los tests generados por
         ChesterGPT. 
