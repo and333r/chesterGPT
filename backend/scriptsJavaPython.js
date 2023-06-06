@@ -96,21 +96,24 @@ async function compareTests(PROMPT, linkTest, code){
     const openai = new OpenAIApi(configuration);
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo-0301",
-      messages: [{role: "user", content: `Compara este test: ${linkTest} con el test que tu has 
-                                          generado ${PROMPT}. Realiza un analisis detallado de cual 
-                                          es mejor test en tu opinion. La comparación debe dar tu opinión
-                                          sobre: Claridad, covertura, eficiencia y mantenibilidad.
-                                          formatea la respuesta dentro de un <div> html, y cuando analices
-                                          los cuatro apartados anteriores, añadelos a una <ul>, con un
-                                          <li> por cada aspecto. Por cada elemento a analizar que
-                                          te hedicho anteriormente, analiza un mínimo de cinco puntos
-                                          por cada uno. También, en un parrafo aparte, quiero que
-                                          digas que cambiarias del primer test con el fin de mejorarlo, dando
-                                          ejemplos concretos. Cuando vayas a referirte al test generado, 
-                                          refierete a el como: el test generado por mi.
-                                          
-                                          Siempre, debajo del análisis y en un <div> aparte, añade esto:
-                                          <div style="background-color: #efefef;"><pre><code>${code}</code></pre></div>`}],
+      messages: [{role: "user", content: `Compara los tests "${linkTest}" y "${PROMPT}" en términos de claridad,
+                                           cobertura, eficiencia y mantenibilidad. Analiza cada aspecto en una lista 
+                                           con al menos cinco puntos por cada uno. Luego, proporciona una sección adicional
+                                            donde se identifiquen posibles mejoras para el primer test, el cual será referido
+                                             como "el test generado por mí". Incluye ejemplos concretos.
+                                             A continuación, se presenta el resumen del prompt para cumplir con los requisitos mencionados:
+                                             <ul>
+                                             <li>Aspecto 1<li/>
+                                                <ul>
+                                                <li>punto 1 <li/>
+                                                <ul/>
+                                            <div style="background-color: #efefef;">
+                                            <pre><code>${code}</code></pre>
+                                            </div>
+                                            Ten en cuenta que este resumen no incluye los puntos específicos de cada aspecto, ya que deberán
+                                             ser agregados en su respectivo lugar. También hay que sustituir el Aspecto por los terminos anteriormente
+                                             mencionados
+`}],
     });
     return completion.data.choices[0].message
   }
